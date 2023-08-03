@@ -8,6 +8,11 @@
 *.so
 *.dylib
 
+venv
+# Ignore Python cache files
+__pycache__/
+*.pyc
+
 # Test binary, built with `go test -c`
 *.test
 
