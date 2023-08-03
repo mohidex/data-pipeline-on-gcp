@@ -50,5 +50,5 @@ class BaseScraper(ABC):
             response = request()
 
             # Parse the HTML content of the response and yield scraped items
-            for item in self.parse(response):
-                yield item
+            for item_html in self.parse(response):
+                yield self.process_item(item_html)

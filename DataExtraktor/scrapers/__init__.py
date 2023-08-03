@@ -1,0 +1,1 @@
+from .chaldal_scraper import ChalDalScraper
