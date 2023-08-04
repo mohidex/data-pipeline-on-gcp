@@ -21,7 +21,7 @@ type Loader struct {
 }
 
 func (l *Loader) Load() {
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Minute)
 	defer cancel()
 
 	// Create a channel for pubsub Message

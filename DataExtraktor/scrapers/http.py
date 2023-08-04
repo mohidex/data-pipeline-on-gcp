@@ -1,7 +1,7 @@
 import requests
 
 class Request:
-    def __init__(self, url, method="GET", headers=None, data=None, callback=None, meta=None):
+    def __init__(self, url, method="GET", headers=None, data=None, callback=None, meta=None, **kwargs):
         """
         Create a new request object.
 
@@ -19,6 +19,7 @@ class Request:
         self.data = data
         self.callback = callback
         self.meta = meta or {}
+        self.kwargs = kwargs
 
     def __call__(self) -> requests.Response:
         """
@@ -31,5 +32,6 @@ class Request:
             method=self.method,
             url=self.url,
             headers=self.headers,
-            data=self.data
+            data=self.data,
+            **self.kwargs
         )

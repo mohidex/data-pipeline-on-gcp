@@ -1,5 +1,8 @@
 from abc import ABC, abstractmethod
-from typing import Dict, Iterator
+from typing import Dict, Iterator, Union
+from requests.models import Response
+from models import Product
+
 
 class BaseScraper(ABC):
     @abstractmethod
@@ -13,30 +16,32 @@ class BaseScraper(ABC):
         pass
 
     @abstractmethod
-    def process_item(self, item_html: str) -> Dict[str, str]:
+    def process_item(self, data: Union[str, dict]) -> Product:
         """
-        Abstract method to process the scraped item from the HTML content.
+        Abstract method to process the scraped item from the data.
 
         Args:
-            item_html (str): The HTML content of the scraped item.
+            data (Union[str, dict]): The scraped item's data, which can be a string or a dictionary.
 
         Returns:
-            Dict[str, str]: A dictionary containing the processed item's data.
+            Product: A processed Product object representing the scraped item's data.
         """
         pass
 
     @abstractmethod
-    def parse(self, html_content: str) -> Iterator[Dict[str, str]]:
+    def parse(self, response: Response) -> Iterator[Union[Dict[str, str], str]]:
         """
-        Abstract method to parse the HTML content and yield scraped items.
+        Abstract method to parse the HTTP response and yield scraped items.
 
         Args:
-            html_content (str): The HTML content to be parsed.
+            response (Response): The HTTP response object containing the HTML content to be parsed.
 
         Yields:
-            Iterator[Dict[str, str]]: An iterator that yields dictionaries representing scraped items.
+            Iterator[Union[Dict[str, str], str]]: An iterator that yields dictionaries or strings representing scraped items.
         """
         pass
+
+
 
     def start(self) -> Iterator[Dict[str, str]]:
         """

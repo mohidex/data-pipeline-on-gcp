@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-class PubSubClient(ABC):
+class IPubSubClient(ABC):
 
     @abstractmethod
     def publish_message(self, message_data: dict) -> None:
