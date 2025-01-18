@@ -10,3 +10,34 @@ The Golang pipeline is responsible for real-time data processing and storage. It
 
 The Python application excels in web scraping, collecting valuable ecommerce data from various websites. The scraper uses Python's BeautifulSoup library for HTML parsing and efficiently extracts relevant product details. After scraping, the data is published to Google Cloud Pub/Sub, enabling real-time data transfer to the Golang data processing pipeline.
 
+
+```mermaid
+flowchart LR
+    Sources((Sources))
+    Scheduler[Scheduler - GHA]
+    Blobs[Blobs - Google Drive]
+    Client((Client))
+    APIService[API Service - Manage Curves]
+    PSQL[(PSQL)]
+    Dashboard[Dashboard]
+    InfluxDB[(Influx DB)]
+    Telegraf[Telegraf]
+    Consumer[Consumer]
+    Compose[Compose]
+    RabbitMQ[[RabbitMQ]]
+    ForecastingModel[Forecasting Model]
+
+    Sources -->|write row data| Scheduler
+    Scheduler --> Blobs
+    Blobs -->|Get row file| Compose
+    Compose -->|Publish processed data| RabbitMQ
+    RabbitMQ -->|Read Msg| Telegraf
+    Telegraf -->|Write TS| InfluxDB
+    APIService -->|Read TS| InfluxDB
+    InfluxDB --> Dashboard
+    Client --> APIService
+    APIService -->|Update Metadata| PSQL
+    PSQL -->|Update Metadata| Consumer
+    Consumer -->|Update Metadata| PSQL
+    RabbitMQ --> ForecastingModel
+```
